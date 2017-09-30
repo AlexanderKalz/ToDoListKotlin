@@ -23,8 +23,8 @@ class DeleteActivity : AppCompatActivity() {
         val toDoItemID = intent.getStringExtra("item")
 
 
-        val ref = FirebaseDatabase.getInstance().getReference("toDoItems")
-        val queryRef = ref.child(toDoItemID).limitToFirst(1)
+        val ref = FirebaseDatabase.getInstance().getReference("toDoItems").child(toDoItemID)
+        val queryRef = ref.limitToFirst(1)
         queryRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError?) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
