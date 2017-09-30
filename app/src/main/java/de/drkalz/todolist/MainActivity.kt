@@ -77,7 +77,9 @@ class MainActivity : AppCompatActivity() {
         lvItems.setOnItemClickListener { adapterView, view, i, l ->
             var selectedItem = itemsList[i]
             val deleteIntent = Intent(this, DeleteActivity::class.java)
-            deleteIntent.putExtra("item", selectedItem.itemId)
+            deleteIntent.putExtra("item", selectedItem.item)
+            deleteIntent.putExtra("itemId", selectedItem.itemId)
+            deleteIntent.putExtra("important", selectedItem.important)
             startActivity(deleteIntent)
         }
     }

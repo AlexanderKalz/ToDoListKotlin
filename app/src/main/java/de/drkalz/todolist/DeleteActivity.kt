@@ -5,10 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 class DeleteActivity : AppCompatActivity() {
 
@@ -17,27 +14,19 @@ class DeleteActivity : AppCompatActivity() {
         setContentView(R.layout.activity_delete)
 
         val tvItem = findViewById<TextView>(R.id.tvItem)
+        tvItem.text = intent.getStringExtra("item")
+
         val cbImp = findViewById<CheckBox>(R.id.cbImportant)
+        cbImp.isChecked = intent.getBooleanExtra("important", false)
+
+        val toDoItemID = intent.getStringExtra("itemId")
+
         val buDelete = findViewById<Button>(R.id.buDelete)
+        buDelete.setOnClickListener {
+            val ref = FirebaseDatabase.getInstance().reference
+            ref.child("toDoItems").child(toDoItemID).removeValue()
+            finish()
+        }
 
-        val toDoItemID = intent.getStringExtra("item")
-
-
-        val ref = FirebaseDatabase.getInstance().getReference("toDoItems").child(toDoItemID)
-        val queryRef = ref.limitToFirst(1)
-        queryRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onDataChange(p0: DataSnapshot?) {
-                val children = p0!!.children
-                children.forEach {
-                    tvItem.text = it.child("item").value.toString()
-                    cbImp.isChecked = it.child("important").value as Boolean
-                }
-
-            }
-        })
     }
 }
