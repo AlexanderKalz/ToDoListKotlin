@@ -24,6 +24,7 @@ class DeleteActivity : AppCompatActivity() {
         val buDelete = findViewById<Button>(R.id.buDelete)
         buDelete.setOnClickListener {
             val ref = FirebaseDatabase.getInstance().reference
+
             ref.child("toDoItems").child(toDoItemID).removeValue()
             finish()
         }

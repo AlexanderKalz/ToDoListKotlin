@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -50,15 +49,15 @@ class MainActivity : AppCompatActivity() {
 
         val itemsList: MutableList<ToDoListItem> = mutableListOf()
         var lvItems = findViewById<ListView>(R.id.lvItems)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, itemsList)
-        lvItems.adapter = adapter
+
+        var cAdapter: CustomAdapter
+        cAdapter = CustomAdapter(applicationContext, itemsList)
+        lvItems.adapter = cAdapter
 
         val ref = FirebaseDatabase.getInstance().getReference("toDoItems")
         val queryRef = ref.orderByKey()
         queryRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+            override fun onCancelled(p0: DatabaseError?) {}
 
             override fun onDataChange(p0: DataSnapshot?) {
                 val children = p0!!.children
@@ -70,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                     itemsList.add(item)
                 }
                 lvItems.invalidate()
-                adapter.notifyDataSetChanged()
+                cAdapter.notifyDataSetChanged()
             }
         })
 
